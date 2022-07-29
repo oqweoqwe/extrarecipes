@@ -1,0 +1,8 @@
+main: me.oqwe.extrarecipes.Main
+version: 1.0
+name: ExtraRecipes
+authors: [oqwe]
+api-version: 1.19
+commands:
+  extrarecipes:
+    aliases: [er]
