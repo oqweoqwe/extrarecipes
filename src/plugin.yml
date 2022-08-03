@@ -1,5 +1,5 @@
 main: me.oqwe.extrarecipes.Main
-version: 1.0
+version: 1.0.1
 name: ExtraRecipes
 authors: [oqwe]
 api-version: 1.19
