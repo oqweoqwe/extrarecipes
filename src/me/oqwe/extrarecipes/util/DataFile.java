@@ -42,6 +42,9 @@ public class DataFile {
 
 	}
 	
+	/**
+	 * @return List of recipe objects that have already been added to bukkit from the constructor
+	 */
 	public List<Recipe> loadRecipes() {
 		List<Recipe> list = new ArrayList<Recipe>();
 		
@@ -52,6 +55,9 @@ public class DataFile {
 		return list;
 	}
 
+	/**
+	 * Save config to file
+	 */
 	public void save() {
 		try {
 			config.save(file);
@@ -60,6 +66,11 @@ public class DataFile {
 		}
 	}
 	
+	/**
+	 * Delete a recipe from file
+	 * 
+	 * @param id UUID of recipe to be deleted
+	 */
 	public void delete(String id) {
 		try {
 			config.set(id, null);
@@ -70,12 +81,18 @@ public class DataFile {
 		
 	}
 
+	/**
+	 * Reset config to default
+	 */
 	public void resetFile() {
 		config = getDefaultConfig();
 		save();
 		config = YamlConfiguration.loadConfiguration(file);
 	}
 
+	/**
+	 * @return Default config
+	 */
 	private FileConfiguration getDefaultConfig() {
 		FileConfiguration config = new YamlConfiguration();
 

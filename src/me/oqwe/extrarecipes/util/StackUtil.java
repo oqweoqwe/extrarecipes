@@ -6,6 +6,13 @@ import org.bukkit.inventory.meta.ItemMeta;
 
 public class StackUtil {
 
+	/**
+	 * Create an itemstack
+	 * 
+	 * @param material Material of the stack
+	 * @param displayName Display name of the stack
+	 * @return The created itemstack
+	 */
 	public static ItemStack stack(Material material, String displayName) {
 		
 		ItemStack stack = new ItemStack(material);

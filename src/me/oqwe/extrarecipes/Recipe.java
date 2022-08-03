@@ -20,6 +20,13 @@ public class Recipe {
 	private ItemStack result;
 	private List<String> ingredients;
 	
+	/**
+	 * Create an object for storing data for each recipe
+	 * 
+	 * @param result The itemstack that is the recipes result
+	 * @param ingredients A list of strings that represent the ingredients in l-to-r, top-to-bottom order
+	 * @param id Randomly generated UUID of this recipe
+	 */
 	public Recipe(ItemStack result, List<String> ingredients, UUID id) {
 	
 		this.result = result;
@@ -33,6 +40,12 @@ public class Recipe {
 				
 	}
 	
+	/**
+	 * Creates the shaped recipe to be added to bukkit
+	 * 
+	 * @param list A list of strings that represent the ingredients in l-to-r, top-to-bottom order
+	 * @return A shaped recipe to be added to bukkit
+	 */
 	private ShapedRecipe getRecipeFromList(List<String> list) {
 		ShapedRecipe recipe = new ShapedRecipe(key, result);
 

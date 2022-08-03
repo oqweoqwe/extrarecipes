@@ -1,12 +1,9 @@
 package me.oqwe.extrarecipes;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import org.bukkit.Bukkit;
-import org.bukkit.entity.Player;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -20,9 +17,6 @@ public class Main extends JavaPlugin {
 	private static Main instance;
 	private static DataFile dataFile;
 	private static List<Recipe> recipes = new ArrayList<Recipe>();
-	private static Set<Player> noclose = new HashSet<Player>();
-	
-	// TODO prevent duplicate recipes
 	
 	public void onEnable() {
 		
@@ -49,10 +43,10 @@ public class Main extends JavaPlugin {
 		
 	}
 	
+	// unload custom recipes
 	public void onDisable() {
-		for (var recipe : recipes) {
+		for (var recipe : recipes)
 			Bukkit.removeRecipe(recipe.getKey());
-		}
 	}
 	
 	private void registerCommands() {
@@ -75,10 +69,6 @@ public class Main extends JavaPlugin {
 	
 	public static List<Recipe> getRecipes() {
 		return recipes;
-	}
-	
-	public static Set<Player> getNoClose() {
-		return noclose;
 	}
 	
 }

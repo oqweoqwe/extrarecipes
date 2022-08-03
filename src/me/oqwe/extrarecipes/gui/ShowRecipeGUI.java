@@ -41,6 +41,9 @@ public class ShowRecipeGUI implements Listener {
 		
 	}
 	
+	/**
+	 * Moves to the next inventory if one exists
+	 */
 	public void next() {
 		if (index+1 < guis.size()) {
 			index++;
@@ -52,10 +55,16 @@ public class ShowRecipeGUI implements Listener {
 		}
 	}
 	
+	/**
+	 * Close inventory
+	 */
 	public void close() {
 		player.closeInventory();
 	}
 	
+	/**
+	 * Moves to the previous inventory if one exists
+	 */
 	public void previous() {
 		if (index > 0) {
 			index--;
@@ -66,12 +75,11 @@ public class ShowRecipeGUI implements Listener {
 		}
 	}
 	
+	/**
+	 * Delete inventory from memory and local storage and unload it from bukkit
+	 */
 	public void delete() {
 		
-		// remove from bukkit
-		// remove from file
-		// remove from recipes in main
-		// update inventory list and index
 		Recipe rec = null;
 		for (var recipe : Main.getRecipes())
 			if (recipe.getID().equals(getUUIDFromPersistentData())) {
@@ -88,7 +96,8 @@ public class ShowRecipeGUI implements Listener {
 		
 		if (guis.size() == 0) {
 			ignoreClose = false;
-			player.closeInventory();			
+			player.closeInventory();
+			player.sendMessage(ChatColor.YELLOW+"Deleted recipe");
 			return;
 		}
 		
@@ -97,8 +106,13 @@ public class ShowRecipeGUI implements Listener {
 		} catch (IndexOutOfBoundsException e) {
 		}
 		
+		player.sendMessage(ChatColor.YELLOW+"Deleted recipe");
+		
 	}
 	
+	/**
+	 * @return The UUID of the recipe that is hidden in the persistent data of the result itemstack
+	 */
 	private UUID getUUIDFromPersistentData() {
 		return UUID.fromString(guis.get(index).getItem(24).getItemMeta().getPersistentDataContainer().get(new NamespacedKey(Main.getInstance(), "recipeuuid"), PersistentDataType.STRING));
 	}
@@ -115,8 +129,8 @@ public class ShowRecipeGUI implements Listener {
 	/**
 	 * Generates a list of inventories representing all custom recipis
 	 * 
-	 * @param recipes List of {@link Recipe} objects
-	 * @return List of inventories
+	 * @param recipes List of recipe objects
+	 * @return List of inventories in order of creation
 	 */
 	private List<Inventory> prepareInventories() {
 		List<Inventory> inventories = new ArrayList<Inventory>();
@@ -148,13 +162,14 @@ public class ShowRecipeGUI implements Listener {
 				inv.setItem(48, previous);
 			}
 			if (i < recipes.size() - 1) {
-
+				// set next arrow
 				ItemStack next = StackUtil.stack(Material.ARROW, ChatColor.YELLOW + "Next recipe");
 				inv.setItem(50, next);
 
 			}
 
-			// set result (hiding uuid of recipe)
+			// set result, the UUID of the recipe is hidden in this itemstacks persistent data container because i couldn't come up with
+			// a better way to do it and this is kinda fun
 			ItemStack result = new ItemStack(
 					Material.getMaterial(recipes.get(i).getRecipe().getResult().getType().toString()));
 			ItemMeta meta = result.getItemMeta();
@@ -184,6 +199,7 @@ public class ShowRecipeGUI implements Listener {
 		return ignoreClose;
 	}
 
+	// this is not very sexy but it was the easiest way to do what i wanted
 	private static int matrixSlotToIndex(int i) {
 		switch (i) {
 

@@ -14,15 +14,7 @@ import me.oqwe.extrarecipes.gui.ShowRecipeGUI;
 
 public class ViewCommand implements Listener {
 
-	// when run: create instance of gui
-	// gui constructor -> create list of inventories and index
-	// gui -> boolean: ignore close = false per standard (when opening new
-	// inventory, set to true and reset after)
-	// gui -> logic to next and previous inventory
-	// gui -> close logic
-	// gui -> delete logic
-
-	// map off players in view mode and their gui instances
+	// players and the gui instance with which they are associated
 	private static Map<Player, ShowRecipeGUI> map = new HashMap<Player, ShowRecipeGUI>();
 
 	public static void run(Player player, String[] args) {
@@ -48,9 +40,7 @@ public class ViewCommand implements Listener {
 
 	@EventHandler
 	public void onClick(InventoryClickEvent e) {
-
-		// if inventory has right title and player is in map then call correct method on
-		// instance from map
+		
 		if (!e.getView().getTitle().contains("Recipe #"))
 			return;
 		if (!map.containsKey(e.getWhoClicked()))
@@ -83,10 +73,6 @@ public class ViewCommand implements Listener {
 			return;
 
 		Player player = (Player) e.getPlayer();
-
-		// get instance from map and check boolean ignore close:
-		// true -> do nothing
-		// false -> remove from map
 
 		if (map.containsKey(player) && !map.get(player).getIgnoreClose()) {
 			map.replace(player, null);

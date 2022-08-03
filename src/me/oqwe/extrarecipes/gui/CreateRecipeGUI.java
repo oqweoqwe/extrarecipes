@@ -29,8 +29,11 @@ public class CreateRecipeGUI implements Listener {
 	private static final int[] blockedslots = new int[] { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 13, 14, 15, 16, 17, 18, 22, 23,
 			25, 26, 27, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53 };
 
+	/**
+	 * Reset the create recipe inventory
+	 */
 	public static void resetGUI() {
-
+		
 		ItemStack pane = StackUtil.stack(Material.BLACK_STAINED_GLASS_PANE, " ");
 
 		for (int i = 0; i < 54; i++)
@@ -66,8 +69,6 @@ public class CreateRecipeGUI implements Listener {
 		
 		if (e.getRawSlot() == 33) {
 			
-			
-			// TODO save to file and load into bukkit
 			saveRecipe(e.getWhoClicked());
 			
 		}
@@ -83,8 +84,13 @@ public class CreateRecipeGUI implements Listener {
 
 	}
 	
+	
+	/**
+	 * Saves the recipe that the player has created, including checks for npe and so on
+	 * 
+	 * @param player The player that is creating a recipe
+	 */
 	public void saveRecipe(HumanEntity player) {
-		// save to file and load into bukkit
 		
 		// first check that recipe has a result
 		if (gui.getItem(24) == null) {
@@ -113,6 +119,7 @@ public class CreateRecipeGUI implements Listener {
 		if (list.size() != 9)
 			return;
 		
+		// check that recipe doesn't alredy exist
 		boolean duplicate = false;
 		for (var recipe : Main.getRecipes()) {
 			if (recipe.getIngredients().equals(list) && recipe.getRecipe().getResult().equals(gui.getItem(24)))
@@ -123,7 +130,7 @@ public class CreateRecipeGUI implements Listener {
 			return;
 		}
 		
-		// create recipe
+		// create a new recipe object, the constructor adds the recipe to bukkit
 		Recipe recipe = new Recipe(gui.getItem(24), list, UUID.randomUUID());
 		
 		// save to file
@@ -131,7 +138,7 @@ public class CreateRecipeGUI implements Listener {
 		Main.getDataFile().getConfig().set(recipe.getID().toString()+".result", recipe.getRecipe().getResult().getType().toString());
 		Main.getDataFile().save();
 		
-		// create recipe and load it
+		// store recipe object in list
 		Main.getRecipes().add(recipe);
 		
 		player.closeInventory();
@@ -140,7 +147,6 @@ public class CreateRecipeGUI implements Listener {
 		
 		
 	}
-	
 	
 	public static void open(Player player) {
 		player.openInventory(gui);
