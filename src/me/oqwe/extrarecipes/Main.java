@@ -14,7 +14,7 @@ import me.oqwe.extrarecipes.util.DataFile;
 
 public class Main extends JavaPlugin {
 
-	// TODO give back items when you close /er create, no matter if it is with close button or with esc/e
+	// TODO implement support for stacked items
 	
 	private static Main instance;
 	private static DataFile dataFile;

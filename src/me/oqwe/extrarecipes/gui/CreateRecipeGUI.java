@@ -20,9 +20,10 @@ public class CreateRecipeGUI implements Listener {
 
 	// 49 is close button, 33 is save button, 24 is result
 	
-	private static Inventory gui;
-	private static final int[] allowedslots = new int[] { 10, 11, 12, 19, 20, 21, 24, 28, 29, 30 };
-	private static final int[] craftingmatrix = new int[] { 10, 11, 12, 19, 20, 21, 28, 29, 30 };
+	private Inventory gui;
+	private final int[] allowedslots = new int[] { 10, 11, 12, 19, 20, 21, 24, 28, 29, 30 };
+	private final int[] craftingmatrix = new int[] { 10, 11, 12, 19, 20, 21, 28, 29, 30 };
+	private boolean ignoreClose = false;
 	
 	private final Player player;
 	
@@ -68,6 +69,7 @@ public class CreateRecipeGUI implements Listener {
 	 * Close inventory
 	 */
 	public void close() {
+		ignoreClose = true;
 		player.closeInventory();
 	}
 	
@@ -127,11 +129,15 @@ public class CreateRecipeGUI implements Listener {
 		// store recipe object in list
 		Main.getRecipes().add(recipe);
 		
-		player.closeInventory();
+		close();
 		resetGUI();
 		player.sendMessage(ChatColor.YELLOW+"Saved recipe");
 		
 		
 	}
 
+	public boolean getIgnoreClose() {
+		return ignoreClose;
+	}
+	
 }
