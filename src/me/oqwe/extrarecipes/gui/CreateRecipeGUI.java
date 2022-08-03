@@ -7,11 +7,8 @@ import java.util.UUID;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
-import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
@@ -23,25 +20,39 @@ public class CreateRecipeGUI implements Listener {
 
 	// 49 is close button, 33 is save button, 24 is result
 	
-	private static final Inventory gui = Bukkit.createInventory(null, 54, "Create new recipe");
+	private static Inventory gui;
 	private static final int[] allowedslots = new int[] { 10, 11, 12, 19, 20, 21, 24, 28, 29, 30 };
 	private static final int[] craftingmatrix = new int[] { 10, 11, 12, 19, 20, 21, 28, 29, 30 };
-	private static final int[] blockedslots = new int[] { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 13, 14, 15, 16, 17, 18, 22, 23,
-			25, 26, 27, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53 };
+	
+	private final Player player;
+	
+	public CreateRecipeGUI(Player player) {
+		this.player = player;
+		gui = Bukkit.createInventory(null, 54, "Create new recipe");
+		
+		resetGUI();
+		
+		open();
+	}
+	
+	public void open() {
+		player.openInventory(gui);
+	}
 
 	/**
 	 * Reset the create recipe inventory
 	 */
-	public static void resetGUI() {
+	public void resetGUI() {
 		
 		ItemStack pane = StackUtil.stack(Material.BLACK_STAINED_GLASS_PANE, " ");
 
+		// fill with panes
 		for (int i = 0; i < 54; i++)
 			gui.setItem(i, pane);
 
-		for (var i : allowedslots) {
+		// set allowed slots as air
+		for (var i : allowedslots)
 			gui.setItem(i, new ItemStack(Material.AIR));
-		}
 
 		ItemStack close = StackUtil.stack(Material.BARRIER, ChatColor.RED+"Close");
 
@@ -52,45 +63,20 @@ public class CreateRecipeGUI implements Listener {
 		gui.setItem(33, craft);
 
 	}
-
-	@EventHandler
-	public void onClick(InventoryClickEvent e) {
-
-		if (!e.getView().getTitle().equals("Create new recipe")) {
-			return;
-		}
-		
-		if (e.getRawSlot() == 49) {
-			// close
-			e.getWhoClicked().closeInventory();
-			resetGUI();
-			e.getWhoClicked().sendMessage(ChatColor.RED+"Recipe was not saved");
-		}
-		
-		if (e.getRawSlot() == 33) {
-			
-			saveRecipe(e.getWhoClicked());
-			
-		}
-
-		boolean cancel = false;
-
-		for (var i : blockedslots) {
-			if (e.getRawSlot() == i)
-				cancel = true;
-		}
-
-		e.setCancelled(cancel);
-
-	}
 	
+	/**
+	 * Close inventory
+	 */
+	public void close() {
+		player.closeInventory();
+	}
 	
 	/**
 	 * Saves the recipe that the player has created, including checks for npe and so on
 	 * 
 	 * @param player The player that is creating a recipe
 	 */
-	public void saveRecipe(HumanEntity player) {
+	public void saveRecipe() {
 		
 		// first check that recipe has a result
 		if (gui.getItem(24) == null) {
@@ -146,10 +132,6 @@ public class CreateRecipeGUI implements Listener {
 		player.sendMessage(ChatColor.YELLOW+"Saved recipe");
 		
 		
-	}
-	
-	public static void open(Player player) {
-		player.openInventory(gui);
 	}
 
 }

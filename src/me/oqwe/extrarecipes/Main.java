@@ -8,12 +8,14 @@ import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import me.oqwe.extrarecipes.command.ExtraRecipes;
+import me.oqwe.extrarecipes.command.sub.CreateCommand;
 import me.oqwe.extrarecipes.command.sub.ViewCommand;
-import me.oqwe.extrarecipes.gui.CreateRecipeGUI;
 import me.oqwe.extrarecipes.util.DataFile;
 
 public class Main extends JavaPlugin {
 
+	// TODO give back items when you close /er create, no matter if it is with close button or with esc/e
+	
 	private static Main instance;
 	private static DataFile dataFile;
 	private static List<Recipe> recipes = new ArrayList<Recipe>();
@@ -29,12 +31,10 @@ public class Main extends JavaPlugin {
 				
 		registerCommands();
 		registerListeners();
-		CreateRecipeGUI.resetGUI();
 		
 	}
 	
 	public void reload() {
-		CreateRecipeGUI.resetGUI();
 		// reloadConfig(); -no config at this moment
 		for (var recipe : recipes) {
 			Bukkit.removeRecipe(recipe.getKey());
@@ -55,7 +55,7 @@ public class Main extends JavaPlugin {
 	
 	private void registerListeners() {
 		PluginManager pm = getServer().getPluginManager();
-		pm.registerEvents(new CreateRecipeGUI(), this);
+		pm.registerEvents(new CreateCommand(), this);
 		pm.registerEvents(new ViewCommand(), this);
 	}
 	
