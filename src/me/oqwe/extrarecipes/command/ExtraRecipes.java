@@ -38,6 +38,12 @@ public class ExtraRecipes implements CommandExecutor {
 			return true;
 			
 		case "help":
+			
+			if (!sender.hasPermission("extrarecipes.help")) {
+				sender.sendMessage(ChatColor.RED+"You do not have permission to use this command");
+				return true;
+			}
+			
 			sender.sendMessage(cc("&6ExtraRecipes &eversion "+ Main.getInstance().getDescription().getVersion() + " by &6oqwe"));
 			sender.sendMessage(cc("&7Create a new custom recipe"));
 			sender.sendMessage(cc("&7- &6/er create"));
